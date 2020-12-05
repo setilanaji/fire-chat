@@ -20,11 +20,8 @@
                 android:id="@+id/tvMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/gilroy_light"
                 android:padding="5dp"
                 android:layout_marginTop="5dp"
-                android:textColor="@color/colorAccent"
-                android:background="@drawable/item_right_side_background"
                 android:textSize="16sp"
                 tools:text="farhan" />
 

@@ -7,11 +7,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
-<!--    <data>-->
-<!--        <variable-->
-<!--            name="contact"-->
-<!--            type="com.ydh.firechat.model.ContactModel" />-->
-<!--    </data>-->
+    <data>
+        <variable
+            name="user"
+            type="com.ydh.firechat.model.User" />
+    </data>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -62,7 +62,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="24dp"
                     android:layout_marginBottom="8dp"
-                    android:text="}"
+                    android:text="@{user.userName}"
                     android:textColor="@color/white"
                     android:textSize="24sp"
                     android:textStyle="bold"

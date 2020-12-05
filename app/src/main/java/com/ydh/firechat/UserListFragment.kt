@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
@@ -20,10 +21,13 @@ import com.ydh.firechat.model.User
 import com.ydh.firechat.service.FirebaseService
 import kotlinx.android.synthetic.main.fragment_user_list.*
 
-class UserListFragment : Fragment() {
+class UserListFragment : Fragment(), UserAdapter.UserListener {
 
     private lateinit var binding: FragmentUserListBinding
+    private val adapter by lazy { UserAdapter(requireActivity(), this) }
+
     var userList = ArrayList<User>()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,7 +38,7 @@ class UserListFragment : Fragment() {
         binding.run {
 //            rvUser.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
 
-
+            rvUser.adapter = adapter
 //            imgProfile.setOnClickListener {
 //                val intent = Intent(
 //                    this@UsersActivity,
@@ -73,8 +77,6 @@ class UserListFragment : Fragment() {
                 return@addSnapshotListener
             }
 
-            val users = mutableListOf<User>()
-
             value?.let {
                 for (doc in it) {
                     doc.toObject(User::class.java).let { model ->
@@ -85,14 +87,11 @@ class UserListFragment : Fragment() {
                     }
                 }
             }
+            adapter.list = userList
 
-            val userAdapter = UserAdapter(requireContext(), userList)
-            binding.rvUser.adapter = userAdapter
+//            val userAdapter = UserAdapter(requireContext(), userList)
+//            binding.rvUser.adapter = adapter
 
-
-//            adapter.list = users
-
-//            println(users.map { it.email })
         }
 
 
@@ -127,6 +126,11 @@ class UserListFragment : Fragment() {
 //        })
     }
 
+    override fun onClick(model: User) {
+        val action = UserListFragmentDirections.actionUserListFragmentToChatFragment(
+                model
+        )
+        findNavController().navigate(action)    }
 
 
 }
