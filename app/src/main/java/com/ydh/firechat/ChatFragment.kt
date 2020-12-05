@@ -22,6 +22,7 @@ import com.ydh.firechat.model.Chat
 import com.ydh.firechat.model.NotificationData
 import com.ydh.firechat.model.PushNotification
 import com.ydh.firechat.model.User
+import kotlinx.android.synthetic.main.fragment_chat.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,6 +34,7 @@ class ChatFragment : Fragment() {
     lateinit var databaseReference: DocumentReference
     var chatList = ArrayList<Chat>()
     var topic =""
+    lateinit var sender: User
     private val db by lazy { Firebase.firestore }
 
     private lateinit var binding: FragmentChatBinding
@@ -46,20 +48,21 @@ class ChatFragment : Fragment() {
 
         binding.run {
             imgBack.setOnClickListener {
-                activity?.onBackPressed()
+                requireActivity().onBackPressed()
             }
 
             arguments?.let {
                 val args = ChatFragmentArgs.fromBundle(it)
                 println(args.sender.toString())
-                binding.se = args.contact
+sender = args.sender
+                databaseReference =
+                    FirebaseFirestore.getInstance().collection("users").document(sender.userId)
+//                binding.se = args.contact
             }
         }
         firebaseUser = FirebaseAuth.getInstance().currentUser!!
 
 
-        databaseReference =
-        FirebaseFirestore.getInstance().collection("users").document(userId)
 
 
         databaseReference.addSnapshotListener { value, error ->
@@ -73,7 +76,7 @@ class ChatFragment : Fragment() {
             value?.let {
 
                     it.toObject(User::class.java).let { user ->
-
+tvUserName.text = user?.userName
                         if (user?.profileImage == "") {
                             binding.imgProfile.setImageResource(R.drawable.profile_image)
                         } else {
@@ -90,19 +93,19 @@ class ChatFragment : Fragment() {
         }
 
 
-        binding.run {
+        binding.apply {
 
             btnSendMessage.setOnClickListener {
-                var message: String = etMessage.text.toString()
+                val message: String = etMessage.text.toString()
 
                 if (message.isEmpty()) {
                     Toast.makeText(context, "message is empty", Toast.LENGTH_SHORT).show()
                     etMessage.setText("")
                 } else {
-                    sendMessage(firebaseUser!!.uid, userId, message)
+                    sendMessage(firebaseUser!!.uid, sender.userId, message)
                     etMessage.setText("")
-                    topic = "/$userId"
-                    PushNotification(NotificationData(userName!!, message),
+                    topic = "/${sender.userId}"
+                    PushNotification(NotificationData(sender.userName!!, message),
                             topic).also {
                         sendNotification(it)
                     }
@@ -111,9 +114,9 @@ class ChatFragment : Fragment() {
             }
         }
 
-        readMessage(firebaseUser.uid, userId)
+        readMessage(firebaseUser.uid, sender.userId)
 
-        return inflater.inflate(R.layout.fragment_chat, container, false)
+        return binding.root
 
     }
 
@@ -135,6 +138,7 @@ class ChatFragment : Fragment() {
     }
 
     fun readMessage(senderId: String, receiverId: String) {
+        chatList.clear()
 
 
         db.collection("chat").addSnapshotListener { value, error ->

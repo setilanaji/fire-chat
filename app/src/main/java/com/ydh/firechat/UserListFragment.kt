@@ -61,6 +61,7 @@ class UserListFragment : Fragment(), UserAdapter.UserListener {
     }
 
     private fun getUsersList() {
+        userList.clear()
         val firebase: FirebaseUser = FirebaseAuth.getInstance().currentUser!!
 
         var userid = firebase.uid

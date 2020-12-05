@@ -62,7 +62,7 @@ class UserAdapter(private val context: Context,
         init {
             this.binding = itemBinding
             itemBinding.ivItemContact.setOnClickListener {
-                listener.onClick(itemBinding.user)
+                listener.onClick(itemBinding.user!!)
             }
         }
 
