@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_nav"
+    app:startDestination="@id/userListFragment">
+
+    <fragment
+        android:id="@+id/userListFragment"
+        android:name="com.ydh.firechat.UserListFragment"
+        android:label="fragment_user_list"
+        tools:layout="@layout/fragment_user_list" >
+        <action
+            android:id="@+id/action_userListFragment_to_chatFragment"
+            app:destination="@id/chatFragment"
+            app:popUpTo="@id/userListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.ydh.firechat.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat" />
+</navigation>

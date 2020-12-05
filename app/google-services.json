@@ -1,0 +1,93 @@
+{
+  "project_info": {
+    "project_number": "907582710157",
+    "firebase_url": "https://chatkotlin-636bf.firebaseio.com",
+    "project_id": "chatkotlin-636bf",
+    "storage_bucket": "chatkotlin-636bf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907582710157:android:7efbd09f12e3c4741cddc4",
+        "android_client_info": {
+          "package_name": "com.ydh.chatyok"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907582710157-04tqhavsam46e0i9238gr9tshlp6m3sn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ydh.chatyok",
+            "certificate_hash": "3725153b8169370d2c76b01475fff23d0872c594"
+          }
+        },
+        {
+          "client_id": "907582710157-cith301bqpd0gbeug8ghvduf1s2jka7t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ydh.chatyok",
+            "certificate_hash": "3180755cd8537dc6141bae503c943cb31fa48e62"
+          }
+        },
+        {
+          "client_id": "907582710157-7onfmsb8h83b3tl1jl33192rd04dul4m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGNAvCMCHfjZR3uQkLzzBx7vYQmQq-45w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907582710157-7onfmsb8h83b3tl1jl33192rd04dul4m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907582710157:android:eaa69e06ef7e26551cddc4",
+        "android_client_info": {
+          "package_name": "com.ydh.firechat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907582710157-r98b7kka3g10rk3vb77stie7rb435b5h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ydh.firechat",
+            "certificate_hash": "3180755cd8537dc6141bae503c943cb31fa48e62"
+          }
+        },
+        {
+          "client_id": "907582710157-7onfmsb8h83b3tl1jl33192rd04dul4m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGNAvCMCHfjZR3uQkLzzBx7vYQmQq-45w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907582710157-7onfmsb8h83b3tl1jl33192rd04dul4m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
