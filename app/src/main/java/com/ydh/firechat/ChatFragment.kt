@@ -10,10 +10,7 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
@@ -33,14 +30,14 @@ class ChatFragment : Fragment() {
     lateinit var firebaseUser: FirebaseUser
     lateinit var databaseReference: DocumentReference
     var chatList = ArrayList<Chat>()
-    var topic =""
+    var topic = ""
     lateinit var sender: User
     private val db by lazy { Firebase.firestore }
 
     private lateinit var binding: FragmentChatBinding
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         binding = FragmentChatBinding.inflate(inflater, container, false)
 
@@ -54,9 +51,9 @@ class ChatFragment : Fragment() {
             arguments?.let {
                 val args = ChatFragmentArgs.fromBundle(it)
                 println(args.sender.toString())
-sender = args.sender
+                sender = args.sender
                 databaseReference =
-                    FirebaseFirestore.getInstance().collection("users").document(sender.userId)
+                        FirebaseFirestore.getInstance().collection("users").document(sender.userId)
 //                binding.se = args.contact
             }
         }
@@ -75,15 +72,15 @@ sender = args.sender
 
             value?.let {
 
-                    it.toObject(User::class.java).let { user ->
-tvUserName.text = user?.userName
-                        if (user?.profileImage == "") {
-                            binding.imgProfile.setImageResource(R.drawable.profile_image)
-                        } else {
-                            Glide.with(this).load(user?.profileImage).into(binding.imgProfile)
-                        }
-
+                it.toObject(User::class.java).let { user ->
+                    tvUserName.text = user?.userName
+                    if (user?.profileImage == "") {
+                        binding.imgProfile.setImageResource(R.drawable.profile_image)
+                    } else {
+                        Glide.with(this).load(user?.profileImage).into(binding.imgProfile)
                     }
+
+                }
 
             }
 
@@ -125,11 +122,12 @@ tvUserName.text = user?.userName
         val msg = hashMapOf(
                 "senderId" to senderId,
                 "receiverId" to receiverId,
-                "message" to message
+                "message" to message,
+                "timestamp" to FieldValue.serverTimestamp()
         )
 
         db.collection("chat").add(msg).addOnSuccessListener {
-          Toast.makeText(context, "sent", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "sent", Toast.LENGTH_SHORT).show()
 
         }.addOnFailureListener { exc ->
             exc.printStackTrace()
@@ -138,48 +136,47 @@ tvUserName.text = user?.userName
     }
 
     fun readMessage(senderId: String, receiverId: String) {
-        chatList.clear()
 
 
-        db.collection("chat").addSnapshotListener { value, error ->
-            if (error != null) {
-                error.printStackTrace()
-                return@addSnapshotListener
-            }
+        db.collection("chat")
+                .orderBy("timestamp", Query.Direction.ASCENDING)
+                .addSnapshotListener { value, error ->
+                    if (error != null) {
+                        error.printStackTrace()
+                        return@addSnapshotListener
+                    }
 
-            value?.let {
-                for (doc in it) {
-                    doc.toObject(Chat::class.java).let { model ->
-                        if (model.senderId == senderId && model.receiverId == receiverId
-                                || model.senderId == receiverId && model.receiverId == senderId) {
-                            println(model)
-                            chatList.add(model)
+                    value?.let {
+                        chatList.clear()
+                        for (doc in it) {
+                            doc.toObject(Chat::class.java).let { model ->
+                                if (model.senderId == senderId && model.receiverId == receiverId
+                                        || model.senderId == receiverId && model.receiverId == senderId) {
+                                    println(model)
+                                    chatList.add(model)
+                                }
+                            }
                         }
                     }
+
+                    val chatAdapter = ChatAdapter(requireContext(), chatList)
+                    binding.chatRecyclerView.adapter = chatAdapter
+
                 }
-            }
-
-            val chatAdapter = ChatAdapter(requireContext(), chatList)
-            binding.chatRecyclerView.adapter = chatAdapter
-
-        }
     }
 
     private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
         try {
             val response = RetrofitInstance.api.postNotification(notification)
-            if(response.isSuccessful) {
+            if (response.isSuccessful) {
                 Log.d("TAG", "Response: ${Gson().toJson(response)}")
             } else {
                 Log.e("TAG", response.errorBody()!!.string())
             }
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             Log.e("TAG", e.toString())
         }
     }
-
-
-
 
 
 }
